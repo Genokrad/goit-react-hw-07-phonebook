@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
 import { Section } from './Section/Section';
 import { Form } from './Form/Form';
@@ -6,10 +5,12 @@ import { Search } from './Search/Search';
 import { Contacts } from './Contacts/Contacts';
 import { StyledDiv } from './App.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUsers, deleteUsers } from 'store/users/usersSlice';
+
 import { setFilter } from 'store/filter/filterSlice';
 import { getFilter } from 'store/filter/filterSelector';
-import { getUser } from 'store/users/usersSelector';
+import { getUser } from 'store/cantacts/contactsSelector';
+import { fetchContacts, addContacts, deleteContact } from 'store/operations';
+import { useEffect } from 'react';
 
 export function App() {
   const contacts = useSelector(getUser);
@@ -33,13 +34,11 @@ export function App() {
     }
 
     const newCustomer = {
-      id: nanoid(),
       name: name,
       number: number,
     };
 
-    dispatch(setUsers(newCustomer));
-    // setContacts(prevState => [...prevState, newCustomer]);
+    dispatch(addContacts(newCustomer));
   };
 
   const filterValueHandler = event => {
@@ -47,20 +46,19 @@ export function App() {
     dispatch(setFilter(value));
   };
 
-  const filterContacts = () => {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+  // const filterContacts = () => {
+  //   return contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(filter.toLowerCase())
+  //   );
+  // };
+
+  const deleteContacts = id => {
+    dispatch(deleteContact(id));
   };
 
-  const deleteContact = id => {
-    dispatch(deleteUsers(id));
-    // setContacts(prevState => prevState.filter(contact => contact.id !== id));
-  };
-
-  // useEffect(() => {
-  //   localStorage.setItem(LOCAL_KEY, JSON.stringify(contacts));
-  // }, [contacts]);
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <StyledDiv>
@@ -71,8 +69,8 @@ export function App() {
         <Search filter={filter} onChange={filterValueHandler} />
 
         <Contacts
-          filterContacts={filterContacts()}
-          deleteContact={deleteContact}
+          // filterContacts={filterContacts()}
+          deleteContact={deleteContacts}
         />
       </Section>
     </StyledDiv>

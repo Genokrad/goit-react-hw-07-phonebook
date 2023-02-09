@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
 import { StyledButton } from './Contacts.styled';
+import { filterContacts } from 'store/cantacts/contactsSelector';
+import { useSelector } from 'react-redux';
 
 // export const Contacts = ({ name, number, id, deleteContact,  }) => {
-export const Contacts = ({ filterContacts, deleteContact }) => {
+export const Contacts = ({ deleteContact }) => {
+  const filter = useSelector(filterContacts);
   return (
     <ul>
-      {filterContacts.map(contact => {
+      {filter.map(contact => {
         const { id, name, number } = contact;
         return (
           <li key={id}>
