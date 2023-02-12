@@ -11,13 +11,13 @@ import { getFilter } from 'store/filter/filterSelector';
 import { getUser } from 'store/cantacts/contactsSelector';
 import { fetchContacts, addContacts, deleteContact } from 'store/operations';
 import { useEffect } from 'react';
+import { Loader } from './Loader/Loader';
 
 export function App() {
   const contacts = useSelector(getUser);
-  console.log(contacts);
   const filter = useSelector(getFilter);
-
   const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.contacts.isLoading);
 
   const sendData = data => {
     const { name, number } = data;
@@ -66,8 +66,8 @@ export function App() {
         <Form sendData={sendData} />
       </Section>
       <Section title="Contacts">
+        {isLoading && <Loader />}
         <Search filter={filter} onChange={filterValueHandler} />
-
         <Contacts
           // filterContacts={filterContacts()}
           deleteContact={deleteContacts}

@@ -28,7 +28,7 @@ export const usersSlice = createSlice({
       })
       .addCase(addContacts.fulfilled, (state, action) => {
         state.isLoading = false;
-        // console.log(action.payload);
+
         state.items.push(action.payload);
       })
       .addCase(addContacts.rejected, state => {
@@ -36,15 +36,19 @@ export const usersSlice = createSlice({
       })
       .addCase(deleteContact.pending, state => {
         state.isLoading = true;
+        console.log(state.isLoading);
       })
       .addCase(deleteContact.fulfilled, (state, action) => {
         console.log(action.payload.id);
         state.items = state.items.filter(
           contact => contact.id !== action.payload.id
         );
+        state.isLoading = false;
+        console.log(state.isLoading);
       })
       .addCase(deleteContact.rejected, state => {
         state.isLoading = false;
+        console.log(state.isLoading);
       });
   },
   // deleteContact
